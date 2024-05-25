@@ -11,7 +11,7 @@
         {
             "title": "Video 1",
             "playerLabel": "Video 1",
-            "action": "video:plugin:http://chun4rew.github.io/msx/plugins/hls.html?url=https://ev-h.phncdn.com/hls/videos/202404/22/451437851/,1080P_4000K,720P_4000K,480P_2000K,240P_1000K,_451437851.mp4.urlset/master.m3u8?validfrom=1716618257&validto=1716625457&ipa=45.128.38.195&hdl=-1&hash=rW4tSGnMg13MxbX2UlpbPYPcnXo%3D"
+            "action": "video:https://ev-ph.rdtcdn.com/videos/202307/20/435839281/720P_4000K_435839281.mp4?validfrom=1716621648&validto=1716628848&rate=270k&burst=300k&hash=hLb9ZJxs8E%2BRCzYqrNUGFZRlxB4%3D"
         },
         {
             "title": "Video 2",
