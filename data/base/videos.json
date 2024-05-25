@@ -11,17 +11,17 @@
         {
             "title": "Video 1",
             "playerLabel": "Video 1",
-            "action": "video:http://msx.benzac.de/media/video1.mp4"
+            "action": "video:plugin:http://chun4rew.github.io/msx/plugins/hls.html?url=https://ev-h.phncdn.com/hls/videos/202404/22/451437851/,1080P_4000K,720P_4000K,480P_2000K,240P_1000K,_451437851.mp4.urlset/master.m3u8?validfrom=1716618257&validto=1716625457&ipa=45.128.38.195&hdl=-1&hash=rW4tSGnMg13MxbX2UlpbPYPcnXo%3D"
         },
         {
             "title": "Video 2",
             "playerLabel": "Video 2",
-            "action": "video:http://msx.benzac.de/media/video2.mp4"
+            "action": "video:http://chun4rew.github.io/msx/media/video2.mp4"
         },
         {
             "title": "Video 3",
             "playerLabel": "Video 3",
-            "action": "video:http://msx.benzac.de/media/video3.mp4"
+            "action": "video:http://chun4rew.github.io/msx/media/video3.mp4"
         }
     ]
 }
