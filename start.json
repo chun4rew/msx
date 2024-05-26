@@ -1,5 +1,5 @@
 {
-    "name": "GitHub Pages Example",
-    "version": "1.0.2",
-    "parameter": "menu:https://benzac-de.github.io/msx/data/videos.json"
+    "name": "XXX",
+    "version": "1.0",
+    "parameter": "menu:http://192.168.0.3:8080/msx/data/menu.json"
 }

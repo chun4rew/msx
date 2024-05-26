@@ -4,15 +4,14 @@
     "template": {
         "type": "separate",
         "layout": "0,0,3,3",
-        "icon": "data/ico/ph.ico",
-        "color": "msx-glass"
+        "color": "#ffb347"
     },
     "items": [
         {
             "title": "Video 1",
             "playerLabel": "Video 1",
-            "preview": "data/ico/ph.ico",
-            "action": "video:https://ev-ph.rdtcdn.com/videos/202307/20/435839281/720P_4000K_435839281.mp4?validfrom=1716621648&validto=1716628848&rate=270k&burst=300k&hash=hLb9ZJxs8E%2BRCzYqrNUGFZRlxB4%3D"
+            "image": "",
+            "action": "video:"
         },
         {
             "title": "Video 2",

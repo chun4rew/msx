@@ -1,10 +1,10 @@
 {
-    "headline": "GitHub Pages Example",
+    "headline": "Menu",
     "menu": [
         {
-            "icon": "movie",
+            "icon": "favorite",
             "label": "PornHUB",
-            "data": "https://chun4rew.github.io/msx/data/base/videos.json"
+            "data": "http://192.168.0.3:8080/msx/data/base/videos.json"
         }
     ]
 }
