@@ -4,7 +4,7 @@
         {
             "icon": "favorite",
             "label": "PornHUB",
-            "data": "http://192.168.0.3:8080/msx/data/base/videos.json"
+            "action": "http://192.168.0.3:3333/"
         }
     ]
 }
