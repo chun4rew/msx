@@ -37,8 +37,8 @@ def get_mp4_link(key):
     return video_mp4
 
 
-def parse_videos():
-    url = 'https://rt.pornhub.com/video?o=ht&hd=1&page=15'
+def parse_videos(page):
+    url = f'https://rt.pornhub.com/video?o=ht&hd=1&page={page}'
 
     response = requests.get(url, cookies=cookie, headers=headers)
 

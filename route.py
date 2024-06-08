@@ -27,7 +27,14 @@ def watch_link():
 
 @app.route('/msx/videos.json')
 def videos_page():
-    filling()
+    filling(1)
+    return send_file('msx/videos.json')
+
+
+@app.route('/msx/update')
+def more_videos():
+    page_number = request.args.get('page')
+    filling(page_number)
     return send_file('msx/videos.json')
 
 
