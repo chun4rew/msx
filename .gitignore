@@ -4,3 +4,7 @@
 
 # binfolder
 .bin
+.venv
+
+#
+test.py

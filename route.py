@@ -1,4 +1,4 @@
-from flask import Flask, send_file
+from flask import Flask, send_file, request, redirect
 from json_filler import *
 
 app = Flask(__name__)
@@ -17,6 +17,12 @@ def menu_page():
 @app.route('/msx/example.json')
 def example_page():
     return send_file('msx/example.json')
+
+
+@app.route('/msx/watch')
+def watch_link():
+    key = request.args.get('viewkey')
+    return redirect(get_mp4_link(key))
 
 
 @app.route('/msx/videos.json')

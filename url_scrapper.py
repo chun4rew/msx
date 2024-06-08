@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as bs
 import requests
 import re
-import concurrent.futures
+import json
 
 cookie = {
     "cookie": "platform=pc; accessAgeDisclaimerPH=1; cookieConsent=3;"
@@ -12,34 +12,33 @@ headers = {
 }
 
 
-def get_mp4_link(args):
-    url_prefix = 'https://pornhub.com'
+def get_mp4_link(key):
+    url_prefix = 'https://pornhub.com/view_video.php?viewkey='
 
-    def process_link(link):
-        sess = requests.Session()
-        response = sess.get(url_prefix + link[-1], cookies=cookie, headers=headers)
+    sess = requests.Session()
+    response = sess.get(url_prefix + key, cookies=cookie, headers=headers)
 
-        pattern = re.compile('"format":"mp4",\"videoUrl\":\"([^\"]+)\"')
-        match = pattern.search(response.text)
+    # JavaScript search
+    soup = bs(response.text, 'lxml')
+    player_div = soup.find('div', {'id': 'player'}).find('script')
+    js_var = player_div.text.strip().splitlines()[0]
 
-        quality_url = match.group(1).replace(r'\/', '/')
-        urls = sess.get(quality_url)
+    # Get link for mp4
+    pattern = r'{"defaultQuality":false,"format":"mp4","videoUrl":".*?"'
+    match = re.search(pattern, js_var)
 
-        mp4_links = urls.json()
-        last_item = mp4_links[-1]
-        video_mp4 = last_item["videoUrl"]
-        link[-1] = video_mp4
-        return link
+    content = match.group(0)
+    data = json.loads(content + "}")
+    urls = sess.get(data["videoUrl"])
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = [executor.submit(process_link, link) for link in args]
-        results = [future.result() for future in futures]
-
-    return results
+    mp4_links = urls.json()
+    last_item = mp4_links[-1]
+    video_mp4 = last_item["videoUrl"]
+    return video_mp4
 
 
 def parse_videos():
-    url = 'https://rt.pornhub.com/video?o=ht&page=1'
+    url = 'https://rt.pornhub.com/video?o=ht&hd=1&page=15'
 
     response = requests.get(url, cookies=cookie, headers=headers)
 
@@ -50,10 +49,14 @@ def parse_videos():
 
     for item in parent_li:
         child = item.find('div', {'class': 'phimage'}).find('a', href=True)
-        title = child.find('img')['alt']
-        preview_image = child.find('img')['src']
-        href_video = child['href']
-        duration = child.find('var').text
-        info.append([title, preview_image, duration, href_video])
+
+        if not child.find('div', {'class': 'private-vid-title'}):
+            title = child.find('img')['alt']
+            preview_image = child.find('img')['src']
+            href_video = child['href'].removeprefix('/view_video.php?')
+            duration = child.find('var').text
+            info.append([title, preview_image, duration, href_video])
+        else:
+            pass
 
     return info
