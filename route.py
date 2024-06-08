@@ -1,4 +1,5 @@
 from flask import Flask, send_file
+from json_filler import *
 
 app = Flask(__name__)
 
@@ -13,8 +14,14 @@ def menu_page():
     return send_file('msx/menu.json')
 
 
+@app.route('/msx/example.json')
+def example_page():
+    return send_file('msx/example.json')
+
+
 @app.route('/msx/videos.json')
 def videos_page():
+    filling()
     return send_file('msx/videos.json')
 
 

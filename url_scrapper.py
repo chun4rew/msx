@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 import requests
 import re
+import concurrent.futures
 
 cookie = {
     "cookie": "platform=pc; accessAgeDisclaimerPH=1; cookieConsent=3;"
@@ -12,27 +13,33 @@ headers = {
 
 
 def get_mp4_link(args):
-    sess = requests.Session()
-
     url_prefix = 'https://pornhub.com'
 
-    for link in args:
-        response = sess.get(url_prefix, cookies=cookie, headers=headers)
+    def process_link(link):
+        sess = requests.Session()
+        response = sess.get(url_prefix + link[-1], cookies=cookie, headers=headers)
+
         pattern = re.compile('"format":"mp4",\"videoUrl\":\"([^\"]+)\"')
         match = pattern.search(response.text)
 
         quality_url = match.group(1).replace(r'\/', '/')
-        items = sess.get(quality_url)
+        urls = sess.get(quality_url)
 
-        mp4_links = items.json()
+        mp4_links = urls.json()
         last_item = mp4_links[-1]
         video_mp4 = last_item["videoUrl"]
+        link[-1] = video_mp4
+        return link
 
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [executor.submit(process_link, link) for link in args]
+        results = [future.result() for future in futures]
 
+    return results
 
 
 def parse_videos():
-    url = 'https://pornhub.com/video?o=ht&page=1'
+    url = 'https://rt.pornhub.com/video?o=ht&page=1'
 
     response = requests.get(url, cookies=cookie, headers=headers)
 
@@ -50,8 +57,3 @@ def parse_videos():
         info.append([title, preview_image, duration, href_video])
 
     return info
-
-
-if __name__ == '__main__':
-    items = parse_videos()
-    array_to_json = get_mp4_link(items)
