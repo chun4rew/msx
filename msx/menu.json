@@ -4,12 +4,17 @@
         {
             "icon": "favorite",
             "label": "PornHUB",
-            "data": "http://192.168.0.114:3333/msx/videos.json"
+            "data": "http://192.168.0.104:3333/msx/videos.json"
         },
         {
             "icon": "favorite",
-            "label": "test",
-            "data": "http://192.168.0.114:3333/msx/example.json"
+            "label": "HDrezka",
+            "data": "http://192.168.0.104:3333/msx/rezka.json"
+        },
+        {
+            "icon": "favorite",
+            "label": "example",
+            "data": "http://192.168.0.104:3333/msx/example.json"
         }
     ]
 }

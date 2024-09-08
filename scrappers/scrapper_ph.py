@@ -13,28 +13,28 @@ headers = {
 
 
 def get_mp4_link(key):
-    url_prefix = 'https://pornhub.com/view_video.php?viewkey='
+  url_prefix = 'https://pornhub.com/view_video.php?viewkey='
 
-    sess = requests.Session()
-    response = sess.get(url_prefix + key, cookies=cookie, headers=headers)
+  sess = requests.Session()
+  response = sess.get(url_prefix + key, cookies=cookie, headers=headers)
 
-    # JavaScript search
-    soup = bs(response.text, 'lxml')
-    player_div = soup.find('div', {'id': 'player'}).find('script')
-    js_var = player_div.text.strip().splitlines()[0]
+  # JavaScript search
+  soup = bs(response.text, 'lxml')
+  player_div = soup.find('div', {'id': 'player'}).find('script')
+  js_var = player_div.text.strip().splitlines()[0]
 
-    # Get link for mp4
-    pattern = r'{"defaultQuality":false,"format":"mp4","videoUrl":".*?"'
-    match = re.search(pattern, js_var)
+  # Get link for mp4
+  pattern = r'"defaultQuality":false,"format":"mp4","videoUrl":".*?"'
+  match = re.search(pattern, js_var)
 
-    content = match.group(0)
-    data = json.loads(content + "}")
-    urls = sess.get(data["videoUrl"])
+  content = match.group(0)
+  data = json.loads("{" + content + "}")
+  urls = sess.get(data["videoUrl"])
 
-    mp4_links = urls.json()
-    last_item = mp4_links[-1]
-    video_mp4 = last_item["videoUrl"]
-    return video_mp4
+  mp4_links = urls.json()
+  last_item = mp4_links[-1]
+  video_mp4 = last_item["videoUrl"]
+  return video_mp4
 
 
 def parse_videos(page):
@@ -42,7 +42,7 @@ def parse_videos(page):
 
     response = requests.get(url, cookies=cookie, headers=headers)
 
-    soup = bs(response.text, 'html.parser')
+    soup = bs(response.text, 'lxml')
     parent_li = soup.find_all('li', {'data-action': 'browse'})
 
     info = []
@@ -60,3 +60,5 @@ def parse_videos(page):
             pass
 
     return info
+
+print(get_mp4_link('66c23e7010fe9'))
