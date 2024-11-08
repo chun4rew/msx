@@ -1,56 +1,89 @@
-from flask import Flask, send_file, request, redirect
+from flask import Flask, send_file, redirect, jsonify
 from flask_cors import CORS, cross_origin
+
 from json_filler import *
 
 app = Flask(__name__)
 cors = CORS(app)
 
-@app.route('/msx/start.json')
+
 @cross_origin()
-def start_page():
-    return send_file('msx/start.json')
-
-
 @app.route('/msx/menu.json')
-@cross_origin()
 def menu_page():
-    return send_file('msx/menu.json')
+    return jsonify(menu_json())
 
 
-@app.route('/msx/example.json')
 @cross_origin()
+@app.route('/msx/start.json')
+def start_page():
+    return jsonify(start_json())
+
+
+@cross_origin()
+@app.route('/msx/example.json')
 def example_page():
     return send_file('msx/example.json')
 
 
+@cross_origin()
 @app.route('/msx/rezka.json')
-@cross_origin()
 def hdrezka_page():
-    filling_hdrezka()
-    return send_file('msx/rezka.json')
+    return jsonify(hdrezka_json())
 
 
-@app.route('/msx/watch')
 @cross_origin()
+@app.route('/msx/watch')
 def watch_link():
     key = request.args.get('viewkey')
-    return redirect(get_mp4_link(key))
+    hls_url = get_hls(key)
+    return redirect(hls_url)
 
 
+@cross_origin()
 @app.route('/msx/videos.json')
-@cross_origin()
 def videos_page():
-    filling_ph(1)
-    return send_file('msx/videos.json')
+    return jsonify(ph_json(1))
 
 
-@app.route('/msx/update')
 @cross_origin()
+@app.route('/msx/update')
 def more_videos():
     page_number = request.args.get('page')
-    filling_ph(page_number)
-    return send_file('msx/videos.json')
+    return jsonify(ph_json(page_number))
 
+
+@cross_origin()
+@app.route('/msx/view')
+def hdrezka_video():
+    href = request.args.get('href')
+    translation_id = request.args.get('translateId')
+    return redirect(get_stream_movie(href, translation_id))
+
+
+@cross_origin()
+@app.route('/msx/rezka-info')
+def hdrezka_item_info():
+    href = request.args.get('href')
+    return jsonify(hdrezka_video_parameters_json(href))
+
+
+@cross_origin()
+@app.route('/msx/rezka-series')
+def hdrezka_series_list():
+    href = request.args.get('href')
+    translator = request.args.get('translator')
+    return jsonify(hdrezka_get_series_json(href, translator))
+
+
+@cross_origin()
+@app.route('/msx/rezka-series-watch')
+def hdrezka_watch_sereis():
+    href = request.args.get('href')
+    translator = request.args.get('translator')
+    s = request.args.get('s')
+    e = request.args.get('e')
+    return redirect(get_stream_series(href, translator, s, e))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3333, debug=True)
+    host, port = '0.0.0.0', 3777
+    app.run(host=host, port=port, debug=True)

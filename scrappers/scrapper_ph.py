@@ -1,7 +1,8 @@
-from bs4 import BeautifulSoup as bs
-import requests
 import re
-import json
+from functools import lru_cache
+
+import requests
+from bs4 import BeautifulSoup as bs
 
 cookie = {
     "cookie": "platform=pc; accessAgeDisclaimerPH=1; cookieConsent=3;"
@@ -11,30 +12,24 @@ headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
 }
 
+@lru_cache(maxsize=256)
+def get_hls(key):
+    url_prefix = 'https://pornhub.com/view_video.php?viewkey='
 
-def get_mp4_link(key):
-  url_prefix = 'https://pornhub.com/view_video.php?viewkey='
+    response = requests.get(url_prefix + key, cookies=cookie, headers=headers)
 
-  sess = requests.Session()
-  response = sess.get(url_prefix + key, cookies=cookie, headers=headers)
+    pattern_1080 = r'"defaultQuality":false,"format":"hls","videoUrl":"(.*?)","quality":"1080"'
+    pattern_720 = r'"defaultQuality":true,"format":"hls","videoUrl":"(.*?)","quality":"720"'
+    match_1080 = re.search(pattern_1080, response.text)
 
-  # JavaScript search
-  soup = bs(response.text, 'lxml')
-  player_div = soup.find('div', {'id': 'player'}).find('script')
-  js_var = player_div.text.strip().splitlines()[0]
-
-  # Get link for mp4
-  pattern = r'"defaultQuality":false,"format":"mp4","videoUrl":".*?"'
-  match = re.search(pattern, js_var)
-
-  content = match.group(0)
-  data = json.loads("{" + content + "}")
-  urls = sess.get(data["videoUrl"])
-
-  mp4_links = urls.json()
-  last_item = mp4_links[-1]
-  video_mp4 = last_item["videoUrl"]
-  return video_mp4
+    if match_1080:
+        hls = match_1080.group(1).replace('\\', '')
+        return hls
+    else:
+        match_720 = re.search(pattern_720, response.text)
+        if match_720:
+            hls = match_720.group(1).replace('\\', '')
+            return hls
 
 
 def parse_videos(page):
@@ -60,5 +55,3 @@ def parse_videos(page):
             pass
 
     return info
-
-print(get_mp4_link('66c23e7010fe9'))

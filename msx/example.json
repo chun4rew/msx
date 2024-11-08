@@ -9,7 +9,7 @@
         {
             "title": "321",
             "titleFooter": "17:13",
-            "action": "video:plugin:http://192.168.0.104:3333/plugins/player.html?https://ev.phncdn.com/videos/202408/18/456657411/1080P_4000K_456657411.mp4?validfrom=1725799649&validto=1725806849&rate=50000k&burst=50000k&ip=185.125.101.63&ipa=185.125.101.63&hash=9psaXtZomDfX9p0hbSPyYU9bBeM%3D",
+            "action": "video:http://192.168.0.59:3777/msx/watch?viewkey=ph62e91e0d92fa6",
             "imageFiller": "cover"
         }
   ]
