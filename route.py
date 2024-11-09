@@ -26,9 +26,33 @@ def example_page():
 
 
 @cross_origin()
-@app.route('/msx/rezka.json')
+@app.route('/msx/rezka')
 def hdrezka_page():
-    return jsonify(hdrezka_json())
+    return jsonify(hdrezka_watching_json())
+
+
+@cross_origin()
+@app.route('/msx/rezka_films')
+def hdrezka_films_page():
+    return jsonify(hdrezka_films_json())
+
+
+@cross_origin()
+@app.route('/msx/rezka_series')
+def hdrezka_series_page():
+    return jsonify(hdrezka_series_json())
+
+
+@cross_origin()
+@app.route('/msx/rezka_cartoons')
+def hdrezka_cartoon_page():
+    return jsonify(hdrezka_cartoon_json())
+
+
+@cross_origin()
+@app.route('/msx/rezka_anime')
+def hdrezka_anime_page():
+    return jsonify(hdrezka_anime_json())
 
 
 @cross_origin()

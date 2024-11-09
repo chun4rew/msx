@@ -7,11 +7,10 @@ headers = {
 }
 rezka_url = "https://hdrezka.me/"
 
-# Parse link with filter "Watching"
-def watching_parse():
-    url = 'https://hdrezka.me/?filter=watching'
 
-    response = requests.get(url, headers=headers)
+
+def watching_parse(filter):
+    response = requests.get(rezka_url + filter, headers=headers)
 
     soup = bs(response.text, 'lxml')
     all_items = soup.find('div', {'class': 'b-content__inline_items'})
@@ -30,20 +29,24 @@ def watching_parse():
 
     return info
 
+
 def get_stream_movie(href, translation_id):
     rezka = HdRezkaApi(rezka_url + href)
     stream = rezka.getStream(translation=translation_id)('1080p Ultra')
     return stream[0]
+
 
 def get_translate(href):
     rezka = HdRezkaApi(rezka_url + href)
     translators = rezka.translators
     return translators
 
+
 def get_type(href):
     rezka = HdRezkaApi(rezka_url + href)
     type_ = rezka.type
     return type_
+
 
 def get_series(href, translator):
     rezka = HdRezkaApi(rezka_url + href)
@@ -52,6 +55,7 @@ def get_series(href, translator):
         translator_id = value.get('translator_id')
         if translator_id == int(translator):
             return value.get('episodes')
+
 
 def get_stream_series(href, translator, s, e):
     rezka = HdRezkaApi(rezka_url + href)

@@ -39,8 +39,8 @@ def ph_json(page_number):
 
 
 @lru_cache(maxsize=256)
-def hdrezka_json():
-    items = watching_parse()
+def hdrezka_watching_json():
+    items = watching_parse('?filter=watching')
     array = []
 
     film_tags = "{col:msx-white}{ico:movie}"
@@ -58,6 +58,122 @@ def hdrezka_json():
             "action": f"content:http://{request.host}/msx/rezka-info?href={item[3]}",
             "badge": (film_tags if item[4] == 'Фильм' else series_tags) + f" {item[4]}",
             "badgeColor": (film_badge_color if item[4] == 'Фильм' else series_badge_color),
+            "iconSize": "small"
+        })
+
+    data = {
+        "type": "list",
+        "headline": "Videos",
+        "template": {
+            "type": "separate",
+            "layout": "0,0,2,4",
+            "color": "msx-glass",
+            "iconSize": "medium"
+        },
+        "items": array
+    }
+    return data
+
+
+@lru_cache(maxsize=512)
+def hdrezka_films_json():
+    items = watching_parse('?filter=watching&genre=1')
+    array = []
+
+    for item in items:
+        array.append({
+            "title": item[0],
+            "titleFooter": item[1],
+            "imageFiller": "cover",
+            "image": item[2],
+            "action": f"content:http://{request.host}/msx/rezka-info?href={item[3]}",
+            "iconSize": "small"
+        })
+
+    data = {
+        "type": "list",
+        "headline": "Videos",
+        "template": {
+            "type": "separate",
+            "layout": "0,0,2,4",
+            "color": "msx-glass",
+            "iconSize": "medium"
+        },
+        "items": array
+    }
+    return data
+
+
+@lru_cache(maxsize=512)
+def hdrezka_series_json():
+    items = watching_parse('?filter=watching&genre=2')
+    array = []
+
+    for item in items:
+        array.append({
+            "title": item[0],
+            "titleFooter": item[1],
+            "imageFiller": "cover",
+            "image": item[2],
+            "action": f"content:http://{request.host}/msx/rezka-info?href={item[3]}",
+            "iconSize": "small"
+        })
+
+    data = {
+        "type": "list",
+        "headline": "Videos",
+        "template": {
+            "type": "separate",
+            "layout": "0,0,2,4",
+            "color": "msx-glass",
+            "iconSize": "medium"
+        },
+        "items": array
+    }
+    return data
+
+
+@lru_cache(maxsize=512)
+def hdrezka_cartoon_json():
+    items = watching_parse('?filter=watching&genre=3')
+    array = []
+
+    for item in items:
+        array.append({
+            "title": item[0],
+            "titleFooter": item[1],
+            "imageFiller": "cover",
+            "image": item[2],
+            "action": f"content:http://{request.host}/msx/rezka-info?href={item[3]}",
+            "iconSize": "small"
+        })
+
+    data = {
+        "type": "list",
+        "headline": "Videos",
+        "template": {
+            "type": "separate",
+            "layout": "0,0,2,4",
+            "color": "msx-glass",
+            "iconSize": "medium"
+        },
+        "items": array
+    }
+    return data
+
+
+@lru_cache(maxsize=512)
+def hdrezka_anime_json():
+    items = watching_parse('?filter=watching&genre=82')
+    array = []
+
+    for item in items:
+        array.append({
+            "title": item[0],
+            "titleFooter": item[1],
+            "imageFiller": "cover",
+            "image": item[2],
+            "action": f"content:http://{request.host}/msx/rezka-info?href={item[3]}",
             "iconSize": "small"
         })
 
@@ -95,7 +211,27 @@ def menu_json():
         {
             "icon": "people",
             "label": "Сейчас смотрят",
-            "data": f"http://{request.host}/msx/rezka.json"
+            "data": f"http://{request.host}/msx/rezka"
+        },
+        {
+            "icon": "local-movies",
+            "label": "Фильмы",
+            "data": f"http://{request.host}/msx/rezka_films"
+        },
+        {
+            "icon": "collections",
+            "label": "Сериалы",
+            "data": f"http://{request.host}/msx/rezka_series"
+        },
+        {
+            "icon": "flutter-dash",
+            "label": "Мультфильмы",
+            "data": f"http://{request.host}/msx/rezka_cartoons"
+        },
+        {
+            "icon": "face",
+            "label": "Аниме",
+            "data": f"http://{request.host}/msx/rezka_anime"
         },
         {
             "type": "separator",
